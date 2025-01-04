@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ItemCard from "./itemCard";
+import ItemCard from "./ItemCard";
 
 const Items = () => {
   const [itemData, setItemData] = useState([]);

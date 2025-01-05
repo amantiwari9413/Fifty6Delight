@@ -38,21 +38,20 @@ const Items = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center h-screen bg-orange-100">
         <div className="text-xl font-semibold text-gray-700">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="bg-orange-600 h-screen">
-      <div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 ">
-      {itemData.map((item, index) => (
-        <ItemCard key={index} item={item} />
-      ))}
+    <div className="bg-orange-600 min-h-screen p-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {itemData.map((item, index) => (
+          <ItemCard key={index} item={item} />
+        ))}
+      </div>
     </div>
-    </div>
-
   );
 };
 

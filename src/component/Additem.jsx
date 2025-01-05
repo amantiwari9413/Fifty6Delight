@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const AddItem = () => {
   const [formData, setFormData] = useState({
@@ -7,6 +7,31 @@ const AddItem = () => {
     itemImg: null,
     menuName: "",
   });
+
+  const [menuNames, setMenuNames] = useState([]);
+  const [loadingMenus, setLoadingMenus] = useState(false);
+
+  // Fetch available menu names from API
+  useEffect(() => {
+    const fetchMenuNames = async () => {
+      setLoadingMenus(true);
+      try {
+        const response = await fetch(
+          "https://restaurantapi-07gp.onrender.com/menu/allMenu" // Replace with your API endpoint
+        );
+        const data = await response.json();
+        if (data.success) {
+          setMenuNames(data.data.map((menu) => menu.menuName)); // Assuming API returns an array of menu objects with `menuName`
+        }
+      } catch (error) {
+        console.error("Error fetching menu names:", error);
+      } finally {
+        setLoadingMenus(false);
+      }
+    };
+
+    fetchMenuNames();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,10 +58,13 @@ const AddItem = () => {
     formDataToSend.append("menuName", formData.menuName);
 
     try {
-      const response = await fetch("https://restaurantapi-07gp.onrender.com/item/addItem", {
-        method: "POST",
-        body: formDataToSend,
-      });
+      const response = await fetch(
+        "https://restaurantapi-07gp.onrender.com/item/addItem",
+        {
+          method: "POST",
+          body: formDataToSend,
+        }
+      );
 
       const data = await response.json();
       if (data.success) {
@@ -57,7 +85,7 @@ const AddItem = () => {
   };
 
   return (
-    <div className="p-8 bg-orange-100 min-h-screen">
+    <div className="p-8 bg-gray-100 min-h-screen">
       <h1 className="text-4xl font-bold text-center text-blue-600 mb-8">
         Add New Item
       </h1>
@@ -125,15 +153,27 @@ const AddItem = () => {
           >
             Menu Name:
           </label>
-          <input
-            type="text"
-            id="menuName"
-            name="menuName"
-            value={formData.menuName}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg"
-            required
-          />
+          {loadingMenus ? (
+            <p>Loading menus...</p>
+          ) : (
+            <select
+              id="menuName"
+              name="menuName"
+              value={formData.menuName}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-lg"
+              required
+            >
+              <option value="" disabled>
+                Select a menu
+              </option>
+              {menuNames.map((menu, index) => (
+                <option key={index} value={menu}>
+                  {menu}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
 
         <button

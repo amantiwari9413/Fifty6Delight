@@ -10,6 +10,7 @@ import AddMenu from "./component/AddMenu"
 import Additem from "./component/Additem"
 
 
+
 const RouterApp = () => {
     return (
         <Routes>
@@ -18,6 +19,7 @@ const RouterApp = () => {
             <Route path="/about" element={<About />} />
             <Route path="/menu" element={<Menu />} />
             <Route path="/items" element={<Items />} />
+            <Route path="/order" element={<Order />} />
 
             {/* Nested Route Example */}
             <Route path="/admin" element={<Admin />}>
